@@ -57,7 +57,7 @@ logging.error('This is an error message')
 logging.critical('This is a critical error message')
 
 
-#create/copy files and display the path:
+#Create/copy files and display the path:
 shutil.copyfile(template_file, ipList_file)  #Copy clean template file to ipList_file
 print '\nA new CSV file is created under: ', ipList_file, '\n'
 logging.info('A new CSV file is created under: ')
@@ -67,20 +67,20 @@ logging.info('START')
 # Create a full list of VCN ips:
 def create_vcn_ip_csv(VCN_IP_RANGE):
     VCN_ip_list = {}
-    ip = 1 #start index from 1
+    ip = 1                              #Start index from 1
     with codecs.open(VCN_IP_RANGE,'w','utf-8-sig') as csvVCNip: #Open file
         writer = csv.writer(csvVCNip)   #Read file
         startIP = '207.102.64.'
         while ip < 255:
-            IPstr = str(ip)             #convert integer to string
+            IPstr = str(ip)             #Convert integer to string
             vcnIP = startIP + IPstr
-            writer.writerow([vcnIP])    #write generated ip address
+            writer.writerow([vcnIP])    #Write generated ip address
             VCN_ip_list[ip] = vcnIP
-            ip += 1                     #increase index by 1
+            ip += 1                     #Increase index by 1
     return VCN_ip_list
-    csvVCNip.close()                    #close the file
+    csvVCNip.close()                    #Close the file
     
-VCN_ip_list = create_vcn_ip_csv(VCN_IP_RANGE) #call create_vcn_ip_csv function
+VCN_ip_list = create_vcn_ip_csv(VCN_IP_RANGE) #Call create_vcn_ip_csv function
 
 num = len(VCN_ip_list) #A total number of ips in the list
 print '\nA total number of IPs to validate: ', num, '\n'
@@ -96,36 +96,36 @@ def get_domain_name(url):
     return domain_name
 
 
-#clean email string:
+#Clean email string:
 def clean_email(email):
-    new = ""                                            #a new string
+    new = ""                                            #A new string
     if "Registrant Email:" in email:
-        old = "['Registrant Email:"                     #string to replase - condition 1.1
-        email = str.replace(email, old, new)            #replace method
-        if "']" in email:                               #string to replase - condition 1.2
-            old = "']"                                  #string to replase
-            email = str.replace(email, old, new)        #replace method
-            if " " in email:                            #to strip all whitespace from string
-                old = " "                               #string to replase
-                email = str.replace(email, old, new)    #replace method
+        old = "['Registrant Email:"                     #String to replase - condition 1.1
+        email = str.replace(email, old, new)            #Replace method
+        if "']" in email:                               #String to replase - condition 1.2
+            old = "']"                                  #String to replase
+            email = str.replace(email, old, new)        #Replace method
+            if " " in email:                            #Strip all whitespace from string
+                old = " "                               #String to replase
+                email = str.replace(email, old, new)    #Replace method
     elif "['Registrar Abuse Contact Email:" in email:
-        old = "['Registrar Abuse Contact Email:"        #string to replase - condition 2.1
-        email = str.replace(email, old, new)            #replace method
-        if "']" in email:                               #string to replase - condition 2.2
-            old = "']"                                  #string to replase
-            email = str.replace(email, old, new)        #replace method
-            if " " in email:                            #to strip all whitespace from string
-                old = " "                               #string to replase
-                email = str.replace(email, old, new)    #replace method
+        old = "['Registrar Abuse Contact Email:"        #String to replase - condition 2.1
+        email = str.replace(email, old, new)            #Replace method
+        if "']" in email:                               #String to replase - condition 2.2
+            old = "']"                                  #String to replase
+            email = str.replace(email, old, new)        #Replace method
+            if " " in email:                            #Strip all whitespace from string
+                old = " "                               #String to replase
+                email = str.replace(email, old, new)    #Replace method
     elif "['e-mail:" in email:
         old = "['e-mail:"                               #string to replase - condition 3.1
         email = str.replace(email, old, new)            #replace method
         if "']" in email:                               #string to replase - condition 3.2
             old = "']"                                  #string to replase
             email = str.replace(email, old, new)        #replace method
-            if " " in email:                            #to strip all whitespace from string
+            if " " in email:                            #Strip all whitespace from string
                 old = " "                               #string to replase
-                email = str.replace(email, old, new)    #replace method   
+                email = str.replace(email, old, new)    #Replace method   
     elif "['Admin Email:" in email:
         old = "['Admin Email:"                          #string to replase - condition 4.1
         email = str.replace(email, old, new)            #replace method
