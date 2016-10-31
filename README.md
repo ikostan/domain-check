@@ -6,6 +6,7 @@ Prerequisisties:
 1. Python 2.7.9
 2. pip tool for installing Python packages.
 3. tld for Python.
+4. mailer for Python.
 
 In order to run it:
 
