@@ -20,11 +20,16 @@ Domain-check is a python based script. The main purpose is to automate process o
 
 # In order to run it:
 1. Unzip Domain-check.zip file
-2. Open CLI
-3. Go to Domain-check folder rom CLI console: cd /Domain-check
-4. Run: python domain-check_v4.0.py
+2. Edit 'domains.csv' file (enter domain names that you want to validate, see example inside the file)
+3. Edit 'config.txt' file (enter your SMTP server configurations, see example inside the file)
+4. Open CLI
+5. Go to Domain-check folder rom CLI console: cd /Domain-check
+6. Run: python domain-check_v4.0.py
 
-# File list:
+## Aditional configurations:
+1. 
+
+## File list:
 >'domains.csv'      - Filename for domain/url list
 
 >'template.csv'     - File name for the template file
