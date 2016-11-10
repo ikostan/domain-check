@@ -1,9 +1,9 @@
 # Domain-check script
+=====================
 
 [![N|Solid](https://www2.vcn.bc.ca/wp-content/uploads/2014/06/VCN-logo.png)](https://www2.vcn.bc.ca/)
 
-Domain-check is a python based script.
-What Domain-check script does:
+## What Domain-check script does:
   - Read domain names from the local file
   - Generate IP range for valid IPs
   - Resilve IP address for domain names from the list
@@ -11,6 +11,9 @@ What Domain-check script does:
   - Compare between domain names from the list vs valid IP range
   - Export all resalts to local file in CSV format
   - Send an email notification to all "invalid" domain-admins
+  
+## Motivation
+Domain-check is a python based script. The main purpose is to automate process of verification of hosted domain names and detect if there any domains that no longer related to the hosted server.
 
 # Prerequisisties:
 1. Python 2.7.9
@@ -24,10 +27,10 @@ What Domain-check script does:
 4. Run: python domain-check_v4.0.py
 
 # File list:
-'domains.csv' - Filename for domain/url list
-'ip_list.csv' - Filename for ip list
-'logging.log' - Filename for logs
-'template.csv'- File name for the template file
+'domains.csv'      - Filename for domain/url list
+'ip_list.csv'      - Filename for ip list
+'logging.log'      - Filename for logs
+'template.csv'     - File name for the template file
 'vcn_ip_range.csv' - Filename for list with VCN IP range
-'config.txt' - - Filename for list with SMTP server configurations
+'config.txt'       - Filename for list with SMTP server configurations
 
