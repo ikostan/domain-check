@@ -41,7 +41,12 @@ Domain-check is a python based script. The main purpose is to automate process o
 2. Edit 'startIP' value (default value is: 207.102.64.)
 3. 'ip' represents IP range.
 
+## Wait method:
+- Sleep time between WHOIS calls is set to 1 seccond (time.sleep(1)).
 
+## How to disable send email function:
+1. Go to 'write_csv' finction
+2. Comment 'send_Email(emails[1])'
 
 ## File list:
 >'domains.csv'      - Filename for domain/url list
