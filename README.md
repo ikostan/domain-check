@@ -34,3 +34,7 @@ Domain-check is a python based script. The main purpose is to automate process o
 'vcn_ip_range.csv' - Filename for list with VCN IP range
 'config.txt'       - Filename for list with SMTP server configurations
 
+## Authors
+
+* **Egor Kostan** - *Initial work* - [iKostan](https://github.com/ikostan)
+
