@@ -26,8 +26,21 @@ Domain-check is a python based script. The main purpose is to automate process o
 5. Go to Domain-check folder rom CLI console: cd /Domain-check
 6. Run: python domain-check_v4.0.py
 
-## Aditional configurations:
-1. 
+# Aditional configurations:
+## Logs level:
+1. Default logs level is logging.INFO
+2. In order to change it to DEBUG: change "logging.INFO" to "logging.DEBUG"
+3. Please note: logging.warning, logging.error and logging.critical are still not implemented
+4. Known issue: logging.DEBUG logs show a lot of errors from CLI console, but this issue does not interrup script function. 
+
+## Valid IP range:
+- NOTE:By default script generates IP range from 207.102.64.1 to 207.102.64.255
+- In oprder to change default range configuration:
+1. Go to 'create_vcn_ip_csv' function
+2. Edit 'startIP' value (default value is: 207.102.64.)
+3. 'ip' represents IP range.
+
+
 
 ## File list:
 >'domains.csv'      - Filename for domain/url list
