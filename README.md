@@ -11,9 +11,9 @@
   - Send an email notification to all "invalid" domain-admins
   
 # Motivation
-Domain-check is a python based script. The main purpose is to automate process of verification of hosted domain names and detect if there any domains that no longer related to the hosted server.
+Domain-check is a python based script. The main purpose is to automate the process of verification of hosted domain names and detect if there any domains that no longer related to the hosted server.
 
-# Prerequisisties:
+# Prerequisites:
 1. Python 2.7.9
 2. pip tool for installing Python packages, see [pip 9.0.1](https://pypi.python.org/pypi/pip)
 3. tld for Python, see [tld 0.7.6](https://pypi.python.org/pypi/tld)
@@ -23,15 +23,15 @@ Domain-check is a python based script. The main purpose is to automate process o
 2. Edit 'domains.csv' file (enter domain names that you want to validate, see example inside the file)
 3. Edit 'config.txt' file (enter your SMTP server configurations, see example inside the file)
 4. Open CLI
-5. Go to Domain-check folder rom CLI console: cd /Domain-check
+5. Go to Domain-check folder from CLI console: cd /Domain-check
 6. Run: python domain-check_v4.0.py
 
 # Aditional configurations:
 ## Logs level:
 1. Default logs level is logging.INFO
 2. In order to change it to DEBUG: change "logging.INFO" to "logging.DEBUG"
-3. Please note: logging.warning, logging.error and logging.critical are still not implemented
-4. Known issue: logging.DEBUG logs show a lot of errors from CLI console, but this issue does not interrup script function. 
+3. Please note logging.warning, logging.error and logging.critical are still not implemented
+4. Known issue: logging.DEBUG logs show a lot of errors from CLI console, but this issue does not interrupt script function. 
 
 ## Valid IP range:
 - NOTE:By default script generates IP range from 207.102.64.1 to 207.102.64.255
@@ -42,7 +42,7 @@ Domain-check is a python based script. The main purpose is to automate process o
 3. 'ip' represents IP range.
 
 ## Wait method:
-- Sleep time between WHOIS calls is set to 1 seccond (time.sleep(1)).
+- Sleep time between WHOIS calls is set to 1 second (time.sleep(1)).
 
 ## How to disable send email function:
 1. Go to 'write_csv' finction
@@ -61,7 +61,7 @@ Domain-check is a python based script. The main purpose is to automate process o
 
 >'vcn_ip_range.csv' - List with valid ips (automaticly deleted after script finished to run)
 
->'WHOIS.csv'         - List with WHOIS results (automaticly deleted after script finished to run)
+>'WHOIS.csv'         - List with WHOIS results (automatically deleted after script finished to run)
 
 
 ## Authors
