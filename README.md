@@ -23,3 +23,11 @@ What Domain-check script does:
 3. Go to Domain-check folder rom CLI console: cd /Domain-check
 4. Run: python domain-check_v4.0.py
 
+# File list:
+'domains.csv' - Filename for domain/url list
+'ip_list.csv' - Filename for ip list
+'logging.log' - Filename for logs
+'template.csv'- File name for the template file
+'vcn_ip_range.csv' - Filename for list with VCN IP range
+'config.txt' - - Filename for list with SMTP server configurations
+
