@@ -27,12 +27,20 @@ Domain-check is a python based script. The main purpose is to automate process o
 4. Run: python domain-check_v4.0.py
 
 # File list:
-'domains.csv'      - Filename for domain/url list
-'ip_list.csv'      - Filename for ip list
-'logging.log'      - Filename for logs
-'template.csv'     - File name for the template file
-'vcn_ip_range.csv' - Filename for list with VCN IP range
-'config.txt'       - Filename for list with SMTP server configurations
+>'domains.csv'      - Filename for domain/url list
+
+>'template.csv'     - File name for the template file
+
+>'config.txt'       - Filename for list with SMTP server configurations
+
+>'logging.log'      - Filename for logs (automaticly created after by script)
+
+>'ip_list.csv'      - Filename for ip list (automaticly created after by script)
+
+>'vcn_ip_range.csv' - List with valid ips (automaticly deleted after script finished to run)
+
+>'WHOIS.csv'         - List with WHOIS results (automaticly deleted after script finished to run)
+
 
 ## Authors
 
