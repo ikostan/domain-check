@@ -4,8 +4,8 @@
 # What Domain-check script does:
   - Read domain names from the local file
   - Generate IP range for valid IPs
-  - Resilve IP address for domain names from the list
-  - Retreive WHOIS information for "invalid" domains
+  - Resolve IP addresses for domain names from the list
+  - Retrieve WHOIS information for "invalid" domains
   - Compare between domain names from the list vs valid IP range
   - Export all resalts to local file in CSV format
   - Send an email notification to all "invalid" domain-admins
