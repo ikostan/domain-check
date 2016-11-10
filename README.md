@@ -36,6 +36,7 @@ Domain-check is a python based script. The main purpose is to automate process o
 ## Valid IP range:
 - NOTE:By default script generates IP range from 207.102.64.1 to 207.102.64.255
 - In oprder to change default range configuration:
+
 1. Go to 'create_vcn_ip_csv' function
 2. Edit 'startIP' value (default value is: 207.102.64.)
 3. 'ip' represents IP range.
