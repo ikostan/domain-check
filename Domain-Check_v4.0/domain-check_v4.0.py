@@ -298,23 +298,23 @@ def send_Email(recipient):
     </html>
     """
 
-    # Record the MIME types of both parts - text/plain and text/html.
+    # Record the MIME types of both parts - text/plain and text/HTML.
     part1 = MIMEText(text, 'plain')
     part2 = MIMEText(html, 'html')
 
     # Attach parts into message container.
-    # According to RFC 2046, the last part of a multipart message, in this case
+    # According to RFC 2046, the last part of a multi-part message, in this case
     # the HTML message, is best and preferred.
     msg.attach(part1)
     msg.attach(part2)
 
-    logging.info('Ask for username')
-    username = raw_input("Please enter your username: ") #ask for username
+    logging.info('Ask for user-name')
+    username = raw_input("Please enter your user-name: ") #ask for user-name
     logging.info('Ask for password')
 
     import getpass
     password = getpass.getpass()        #ask for password
-    #print 'You entered:', password     #for debuging only 
+    #print 'You entered:', password     #for debugging only 
 
     logging.info('Login in to email account')
     mail.login(username, password)
@@ -365,11 +365,11 @@ def write_csv(ipList_file):
                 logging.info('Found invalid IP:')
                 logging.debug('Found invalid IP: ' + domains[i] + ': '+ domainIP)
 
-                site_whois = get_whois(domain_url) #call get_whois function in order to create WHOIS.csv file with whois data
+                site_whois = get_whois(domain_url) #call get_whois function in order to create WHOIS.csv file with WHOIS data
                 
                 time.sleep(1) # Wait for x second
                 
-                emails = get_email(WHOIS_file)     #call get_email function in order to extract email from whois data
+                emails = get_email(WHOIS_file)     #call get_email function in order to extract email from WHOIS data
                 emails_num = len(emails)           #get total number of emails
                 if emails_num == 0:
                      emails[0] = 'null'
@@ -398,7 +398,7 @@ def write_csv(ipList_file):
                 emails[3] = clean_email(emails[3]) #call clean_email function in order to clean up all the garbage from the string
                 emails[4] = clean_email(emails[4]) #call clean_email function in order to clean up all the garbage from the string
                 
-                #Invalid IP - write domain name, ip address and INVALID comment
+                #Invalid IP - write domain name, IP address and INVALID comment
                 writer.writerow([domains[i], domainIP, 'invalid', emails[0], emails[1], emails[2], emails[3], emails[4], 'true', 'not implemented', 'not implemented'])
 
                 send_Email(emails[1]) #call send email function
@@ -408,7 +408,7 @@ def write_csv(ipList_file):
                 logging.debug(domains[i], domainIP, 'invalid', emails[0], emails[1], emails[2], emails[3], emails[4], 'true', 'not implemented', 'not implemented')
                 os.remove(WHOIS_file) #remove WHOIS_file
             else:
-                #write domain name and ip address, ip address and VALID comment
+                #write domain name and IP address, IP address and VALID comment
                 writer.writerow([domains[i], domainIP, 'valid', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'false', 'n/a', 'not implemented'])  
                 #logs
                 logging.info('Writing:[domains[i], domainIP, valid, n/a, n/a, n/a, n/a, n/a, false, n/a, not implemented')
