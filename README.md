@@ -7,7 +7,7 @@
   - Resolve IP addresses for domain names from the list
   - Retrieve WHOIS information for "invalid" domains
   - Compare between domain names from the list vs valid IP range
-  - Export all resalts to local file in CSV format
+  - Export all results to local file in CSV format
   - Send an email notification to all "invalid" domain-admins
   
 # Motivation
