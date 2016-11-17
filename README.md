@@ -38,7 +38,7 @@ Domain-check is a python based script. The main purpose is to automate the proce
 - In oprder to change default range configuration:
 
 1. Go to 'create_vcn_ip_csv' function
-2. Edit 'startIP' value (default value is: 207.102.64.)
+2. Edit 'startIP' value (default value is: 0.0.0.)
 3. 'ip' represents IP range.
 
 ## Wait method:
