@@ -76,7 +76,7 @@ def create_vcn_ip_csv(VCN_IP_RANGE):
     ip = 1                              #Start index from 1
     with codecs.open(VCN_IP_RANGE,'w','utf-8-sig') as csvVCNip: #Open file
         writer = csv.writer(csvVCNip)   #Read file
-        startIP = '207.102.64.'
+        startIP = '0.0.0.'
         while ip < 255:
             IPstr = str(ip)             #Convert integer to string
             vcnIP = startIP + IPstr
