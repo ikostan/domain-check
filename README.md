@@ -49,7 +49,8 @@ Domain-check is a python based script. The main purpose is to automate the proce
 ## How to disable/enable send email function:
 1. Go to 'write_csv' finction
 2. Comment 'send_Email(emails[1])'
-NOTE: send email function disabled by default.
+
+### NOTE: send email function disabled by default.
 
 ## File list:
 >'domains.csv'      - Filename for domain/url list
