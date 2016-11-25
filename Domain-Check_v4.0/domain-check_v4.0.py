@@ -76,7 +76,7 @@ def create_vcn_ip_csv(VCN_IP_RANGE):
     ip = 1                              #Start index from 1
     with codecs.open(VCN_IP_RANGE,'w','utf-8-sig') as csvVCNip: #Open file
         writer = csv.writer(csvVCNip)   #Read file
-        startIP = '0.0.0.'
+        startIP = '207.102.64.'
         while ip < 255:
             IPstr = str(ip)             #Convert integer to string
             vcnIP = startIP + IPstr
@@ -108,7 +108,7 @@ def get_domain_name(url):
 def clean_email(email):
     logging.info('Start clean_email function')
     new = ""                                            #A new string
-    if "Registrant Email:" in email:
+    if "['Registrant Email:" in email:
         old = "['Registrant Email:"                     #String to replase - condition 1.1
         email = str.replace(email, old, new)            #Replace method
         if "']" in email:                               #String to replase - condition 1.2
@@ -148,15 +148,6 @@ def clean_email(email):
             if " " in email:                            #to strip all whitespace from string
                 old = " "                               #string to replase
                 email = str.replace(email, old, new)    #replace method
-    elif "['Registrant Email:" in email:
-        old = "['Registrant Email:"                     #string to replase - condition 5.1
-        email = str.replace(email, old, new)            #replace method
-        if "']" in email:                               #string to replase - condition 5.2
-            old = "']"                                  #string to replase
-            email = str.replace(email, old, new)        #replace method
-            if " " in email:                            #to strip all whitespace from string
-                old = " "                               #string to replase
-                email = str.replace(email, old, new)    #replace method
     elif "['Tech Email:" in email:
         old = "['Tech Email:"                           #string to replase - condition 6.1
         email = str.replace(email, old, new)            #replace method
@@ -165,11 +156,65 @@ def clean_email(email):
             email = str.replace(email, old, new)        #replace method
             if " " in email:                            #to strip all whitespace from string
                 old = " "                               #string to replase
-                email = str.replace(email, old, new)    #replace method    
+                email = str.replace(email, old, new)    #replace method
+    elif "['Error code:" in email:                      #Failed receive WHOIS due to error
+        old = "['"                                      #string to replase - condition 7.1
+        email = str.replace(email, old, new)            #replace method
+        if "']" in email:                               #string to replase - condition 7.2
+            old = "']"                                  #string to replase
+            email = str.replace(email, old, new)        #replace method
+            if " " in email:                            #to strip all whitespace from string
+                old = " "                               #string to replase
+                email = str.replace(email, old, new)    #replace method
       
     return email                                        #return the result
     logging.info('Finish clean_email function')
 
+
+#Clean name string:
+def clean_name(name):
+    logging.info('Start clean_name function')
+    new_name = ""                                               #A new string #1
+    new_name2 = " "                                             #A new string #2
+    if ("['Admin Name:" in name) or ("['person:" in name) or ("['Owner Name    :" in name):
+        if "['Admin Name:" in name:
+            old_name = "['Admin Name: "                             #String to replase - condition 1.1
+            name = str.replace(name, old_name, new_name)            #Replace method
+            if "']" in name:                                        #String to replase - condition 1.2
+                old_name = "']"                                     #String to replase
+                name = str.replace(name, old_name, new_name)        #Replace method
+                name = name.strip()                                 #remove extra spaces
+                if "', '" in name:                                  #String to replase - condition 1.2.1
+                    old_name = "', '"                                   #String to replase
+                    name = str.replace(name, old_name, new_name2)       #Replace method
+
+        elif "['person:" in name:                                   #Failed receive WHOIS due to error
+            old_name = "['person: "                                 #string to replase - condition 2.1
+            name = str.replace(name, old_name, new_name)            #replace method
+            if "']" in name:                                        #string to replase - condition 2.2
+                old_name = "']"                                     #string to replase
+                name = str.replace(name, old_name, new_name)        #replace method
+                name = name.strip()                                 #remove extra spaces
+                if "', '" in name:                                  #String to replase - condition 1.2.1
+                    old_name = "', '"                                   #String to replase
+                    name = str.replace(name, old_name, new_name2)       #Replace method
+
+        elif "['Owner Name    :" in name:                           #Failed receive WHOIS due to error
+            old_name = "['Owner Name    :"                          #string to replase - condition 3.1
+            name = str.replace(name, old_name, new_name)            #replace method
+            if "']" in name:                                        #string to replase - condition 3.2
+                old_name = "']"                                     #string to replase
+                name = str.replace(name, old_name, new_name)        #replace method
+                name = name.strip()                                 #remove extra spaces
+                if "', '" in name:                                  #String to replase - condition 1.2.1
+                    old_name = "', '"                                   #String to replase
+                    name = str.replace(name, old_name, new_name2)       #Replace method
+                    
+    else:
+        name = "NOT FOUND"                                          #Admin Name not found
+
+    return name                                                     #return the result
+    logging.info('Finish clean_name function')
 
 # Read from csv file function:
 def read_csv(domainList_file):
@@ -253,6 +298,30 @@ def get_email(WHOIS_file):
     logging.info('Finish get_email function')
 
 
+#Get Email from WHOIS_file function:
+def get_cName(WHOIS_file):
+    logging.info('Start get_cName function')
+    cNames = ""
+    with codecs.open(WHOIS_file,'rU','utf-8-sig') as csvWHOIS: #Open file
+        read_whois = csv.reader(csvWHOIS) #Read file
+        i=0
+        #cNames_id = 0
+        for row in read_whois:
+            test_string = str(row)
+            if test_string.find('Admin Name:') != -1:  #Find 'Admin Name:' in row
+                cNames = test_string
+            elif test_string.find('Owner Name') != -1: #Find 'Owner Name' in row
+                cNames = test_string
+            elif test_string.find('person:') != -1:    #Find 'person:' in row
+                cNames = test_string
+            #elif ((test_string.find('person:') == -1) and (test_string.find('Owner Name') == -1) and (test_string.find('Admin Name:') == -1)):
+            #    cNames = "NAME NOT FOUND"   #Can not find any names
+
+            i += 1
+    return cNames
+    csvWHOIS.Close()
+    logging.info('Finish get_cName function')
+
 # Send an Email function:
 def send_Email(recipient):
     logging.info('Start send_Email function')
@@ -298,23 +367,23 @@ def send_Email(recipient):
     </html>
     """
 
-    # Record the MIME types of both parts - text/plain and text/HTML.
+    # Record the MIME types of both parts - text/plain and text/html.
     part1 = MIMEText(text, 'plain')
     part2 = MIMEText(html, 'html')
 
     # Attach parts into message container.
-    # According to RFC 2046, the last part of a multi-part message, in this case
+    # According to RFC 2046, the last part of a multipart message, in this case
     # the HTML message, is best and preferred.
     msg.attach(part1)
     msg.attach(part2)
 
-    logging.info('Ask for user-name')
-    username = raw_input("Please enter your user-name: ") #ask for user-name
+    logging.info('Ask for username')
+    username = raw_input("Please enter your username: ") #ask for username
     logging.info('Ask for password')
 
     import getpass
     password = getpass.getpass()        #ask for password
-    #print 'You entered:', password     #for debugging only 
+    #print 'You entered:', password     #for debuging only 
 
     logging.info('Login in to email account')
     mail.login(username, password)
@@ -365,11 +434,11 @@ def write_csv(ipList_file):
                 logging.info('Found invalid IP:')
                 logging.debug('Found invalid IP: ' + domains[i] + ': '+ domainIP)
 
-                site_whois = get_whois(domain_url) #call get_whois function in order to create WHOIS.csv file with WHOIS data
+                site_whois = get_whois(domain_url) #call get_whois function in order to create WHOIS.csv file with whois data
                 
                 time.sleep(1) # Wait for x second
                 
-                emails = get_email(WHOIS_file)     #call get_email function in order to extract email from WHOIS data
+                emails = get_email(WHOIS_file)     #call get_email function in order to extract email from whois data
                 emails_num = len(emails)           #get total number of emails
                 if emails_num == 0:
                      emails[0] = 'null'
@@ -392,27 +461,36 @@ def write_csv(ipList_file):
                 elif emails_num == 4:
                      emails[4] = 'null'
 
-                emails[0] = clean_email(emails[0]) #call clean_email function in order to clean up all the garbage from the string
-                emails[1] = clean_email(emails[1]) #call clean_email function in order to clean up all the garbage from the string
-                emails[2] = clean_email(emails[2]) #call clean_email function in order to clean up all the garbage from the string
-                emails[3] = clean_email(emails[3]) #call clean_email function in order to clean up all the garbage from the string
-                emails[4] = clean_email(emails[4]) #call clean_email function in order to clean up all the garbage from the string
+                emails[0] = clean_email(emails[0]) #call clean_email function in order to clean up all the garbage from the emails string
+                emails[1] = clean_email(emails[1]) #call clean_email function in order to clean up all the garbage from the emails string
+                emails[2] = clean_email(emails[2]) #call clean_email function in order to clean up all the garbage from the emails string
+                emails[3] = clean_email(emails[3]) #call clean_email function in order to clean up all the garbage from the emails string
+                emails[4] = clean_email(emails[4]) #call clean_email function in order to clean up all the garbage from the emails string
                 
-                #Invalid IP - write domain name, IP address and INVALID comment
-                writer.writerow([domains[i], domainIP, 'invalid', emails[0], emails[1], emails[2], emails[3], emails[4], 'true', 'not implemented', 'not implemented'])
+                Admin_Name = get_cName(WHOIS_file)
+                Admin_Name = clean_name(Admin_Name) #call clean_name function in order to clean up all the garbage from the Admin_Name string
 
-                send_Email(emails[1]) #call send email function
+                #Invalid IP - write domain name, ip address and INVALID comment
+                if emails[0] == "null":
+                    writer.writerow([domains[i], domainIP, 'invalid', emails[0], emails[1], emails[2], emails[3], emails[4], Admin_Name, 'not implemented', 'FAILED, INVALID EMAL'])
+                    #logs
+                    logging.info('Writing: domains[i], domainIP, invalid, emails[0], emails[1], emails[2], emails[3], emails[4], client name, address, FAILED, INVALID EMAL')
+                    logging.debug(domains[i], domainIP, 'invalid', emails[0], emails[1], emails[2], emails[3], emails[4], Admin_Name, 'address', 'FAILED, INVALID EMAL')
+                else:
+                    writer.writerow([domains[i], domainIP, 'invalid', emails[0], emails[1], emails[2], emails[3], emails[4], Admin_Name, 'not implemented', 'true'])
+                    #logs
+                    logging.info('Writing: domains[i], domainIP, invalid, emails[0], emails[1], emails[2], emails[3], emails[4], client name, address, true')
+                    logging.debug(domains[i], domainIP, 'invalid', emails[0], emails[1], emails[2], emails[3], emails[4], Admin_Name, 'address', 'true')
+
+                #send_Email(emails[1]) #call send email function                
                 
-                #logs
-                logging.info('Writing: domains[i], domainIP, invalid, emails[0], emails[1], emails[2], emails[3], emails[4], true, not implemented, not implemented')
-                logging.debug(domains[i], domainIP, 'invalid', emails[0], emails[1], emails[2], emails[3], emails[4], 'true', 'not implemented', 'not implemented')
                 os.remove(WHOIS_file) #remove WHOIS_file
             else:
-                #write domain name and IP address, IP address and VALID comment
-                writer.writerow([domains[i], domainIP, 'valid', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'false', 'n/a', 'not implemented'])  
+                #write domain name and ip address, ip address and VALID comment
+                writer.writerow([domains[i], domainIP, 'valid', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a','false'])  
                 #logs
-                logging.info('Writing:[domains[i], domainIP, valid, n/a, n/a, n/a, n/a, n/a, false, n/a, not implemented')
-                logging.debug(domains[i], domainIP, 'valid', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'false', 'n/a', 'n/a')
+                logging.info('Writing:[domains[i], domainIP, valid, n/a, n/a, n/a, n/a, n/a, n/a, n/a, false')
+                logging.debug(domains[i], domainIP, 'valid', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'false')
 
             i += 1      #increase index by 1
     csvFile2.close()    #close the file
