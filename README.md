@@ -7,6 +7,8 @@
   - Resolve IP addresses for domain names from the list
   - Retrieve WHOIS information for "invalid" domains
   - Compare between domain names from the list vs valid IP range
+  - Extract relevant eMail addresses
+  - Extract web-admin name
   - Export all results to local file in CSV format
   - Send an email notification to all "invalid" domain-admins
   
@@ -44,9 +46,11 @@ Domain-check is a python based script. The main purpose is to automate the proce
 ## Wait method:
 - Sleep time between WHOIS calls is set to 1 second (time.sleep(1)).
 
-## How to disable send email function:
+## How to disable/enable send email function:
 1. Go to 'write_csv' finction
 2. Comment 'send_Email(emails[1])'
+
+### NOTE: send email function disabled by default.
 
 ## File list:
 >'domains.csv'      - Filename for domain/url list
@@ -61,7 +65,9 @@ Domain-check is a python based script. The main purpose is to automate the proce
 
 >'vcn_ip_range.csv' - List with valid ips (automaticly deleted after script finished to run)
 
->'WHOIS.csv'         - List with WHOIS results (automatically deleted after script finished to run)
+>'WHOIS.csv'        - List with WHOIS results (automatically deleted after script finished to run)
+
+> 'email.txt'       - Contains email notification template
 
 
 ## Authors
