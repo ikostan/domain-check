@@ -1,3 +1,0 @@
-Hello <organization and or name>,
-
-<the body of the message + closing statement to be read and inputted from file>

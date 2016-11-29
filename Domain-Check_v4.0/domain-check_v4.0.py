@@ -14,6 +14,8 @@ import time                                     # This module provides various t
 import smtplib                                  # Import smtplib for the actual sending function
 from email.mime.text import MIMEText            # Import the email modules we'll need
 from email.mime.multipart import MIMEMultipart  # Allows to send a MIME message
+import datetime                                 # Date/Time
+
 #from mailer import Mailer
 #from mailer import Message
 
@@ -30,6 +32,7 @@ from email.mime.multipart import MIMEMultipart  # Allows to send a MIME message
 # file_path = os.path.join(os.getcwd(), template_file)      # Path to template.csv
 # file_path = os.path.join(os.getcwd(), ipList_file)        # Path to vcn_ip.range.csv
 # file_path = os.path.join(os.getcwd(), Config_file)        # Path to config.txt
+# file_path = os.path.join(os.getcwd(), Email_file)        # Path to config.txt
 
 
 def get_file_path(fileName):
@@ -45,6 +48,7 @@ LOG_FILENAME = get_file_path('logging.log')       #Log file
 VCN_IP_RANGE = get_file_path('vcn_ip_range.csv')  #List with vcn ips
 WHOIS_file = get_file_path('WHOIS.csv')           #List with WHOIS results
 Config_file = get_file_path('config.txt')         #Config file: SMTP server + port
+Email_file = get_file_path('email.csv')           #Email notification template
 
 # Write log messages to a log file and the console at the same time:
 if os.path.exists(LOG_FILENAME):
@@ -76,7 +80,7 @@ def create_vcn_ip_csv(VCN_IP_RANGE):
     ip = 1                              #Start index from 1
     with codecs.open(VCN_IP_RANGE,'w','utf-8-sig') as csvVCNip: #Open file
         writer = csv.writer(csvVCNip)   #Read file
-        startIP = '207.102.64.'
+        startIP = '0.0.0.'
         while ip < 255:
             IPstr = str(ip)             #Convert integer to string
             vcnIP = startIP + IPstr
@@ -298,14 +302,13 @@ def get_email(WHOIS_file):
     logging.info('Finish get_email function')
 
 
-#Get Email from WHOIS_file function:
+#Get Admin Name from WHOIS_file function:
 def get_cName(WHOIS_file):
     logging.info('Start get_cName function')
     cNames = ""
     with codecs.open(WHOIS_file,'rU','utf-8-sig') as csvWHOIS: #Open file
         read_whois = csv.reader(csvWHOIS) #Read file
         i=0
-        #cNames_id = 0
         for row in read_whois:
             test_string = str(row)
             if test_string.find('Admin Name:') != -1:  #Find 'Admin Name:' in row
@@ -314,16 +317,33 @@ def get_cName(WHOIS_file):
                 cNames = test_string
             elif test_string.find('person:') != -1:    #Find 'person:' in row
                 cNames = test_string
-            #elif ((test_string.find('person:') == -1) and (test_string.find('Owner Name') == -1) and (test_string.find('Admin Name:') == -1)):
-            #    cNames = "NAME NOT FOUND"   #Can not find any names
 
             i += 1
     return cNames
     csvWHOIS.Close()
     logging.info('Finish get_cName function')
 
+
+#Read and concatinate Email notification:
+def get_eTemplate(Email_file, name, domain):
+    logging.info('Start get_eTemplate function')
+    eTemplate = ""
+    with codecs.open(Email_file,'rU','utf-8-sig') as csvTEMPLATE:   #Open file
+        read_template = csv.reader(csvTEMPLATE)                     #Read file
+        if name == 'NOT FOUND':      
+            eTemplate = "Hello " + domain + "," + "\n"
+        else:
+            eTemplate = "Hello " + name + "," + "\n"
+        for row in read_template:
+            eTemplate = eTemplate + "\n" + ''.join(row)             #convert list object to string
+
+    return eTemplate
+    csvTEMPLATE.Close()
+    logging.info('Finish get_eTemplate function')
+
+
 # Send an Email function:
-def send_Email(recipient):
+def send_Email(recipient, name, domain):
     logging.info('Start send_Email function')
 
     # Send the message via local SMTP server.
@@ -348,34 +368,20 @@ def send_Email(recipient):
 
     # Create message container - the correct MIME type is multipart/alternative.
     msg = MIMEMultipart('alternative')
-    msg['Subject'] = "Link"
+    msg['Subject'] = "Web-admin notification"
     msg['From'] = sender
     msg['To'] = recipient
 
     # Create the body of the message (a plain-text and an HTML version).
-    text = "Hello.\nThis is sample text." #a plain-text
-    #an HTML version
-    html = """\ 
-    <html>
-    <head></head>
-    <body>
-        <p>
-            Hello.<br>
-            This is sample text.
-        </p>
-    </body>
-    </html>
-    """
+    text = get_eTemplate(Email_file, name, domain) #a plain-text
 
     # Record the MIME types of both parts - text/plain and text/html.
     part1 = MIMEText(text, 'plain')
-    part2 = MIMEText(html, 'html')
 
     # Attach parts into message container.
     # According to RFC 2046, the last part of a multipart message, in this case
     # the HTML message, is best and preferred.
     msg.attach(part1)
-    msg.attach(part2)
 
     logging.info('Ask for username')
     username = raw_input("Please enter your username: ") #ask for username
@@ -470,27 +476,44 @@ def write_csv(ipList_file):
                 Admin_Name = get_cName(WHOIS_file)
                 Admin_Name = clean_name(Admin_Name) #call clean_name function in order to clean up all the garbage from the Admin_Name string
 
+                sendEmail = raw_input("Would you like to send an eMail notification to all administrators of invalid domains (1 - yes; 2- no): ") 
+                logging.info('Would you like to send an eMail notification to all administrators of invalid domains (1 - yes; 2- no)')
+                logging.debug('Would you like to send an eMail notification to all administrators of invalid domains (1 - yes; 2- no)', sendEmail)
+
+                if sendEmail == "1":
+                    send_Email(emails[1], Admin_Name, domains[i]) #call send_Email function (recipient, name, domain, isSent)  
+                    isSent = True
+                    logging.info('Email sent')
+                    logging.debug('Email sent', isSent)
+                else:
+                    isSent = False
+                    logging.info('Email not sent')
+                    logging.debug('Email not sent', isSent)
+     
+                now = datetime.datetime.now() #Date/Time stamp
+                timeNow = now.strftime("%Y-%m-%d %H:%M") # Current date and time using strftime (for example: 2014-09-26 16:34)
+                logging.info('date/time')
+                logging.debug('Date/Time: ', now.strftime("%Y-%m-%d %H:%M"))
+
                 #Invalid IP - write domain name, ip address and INVALID comment
                 if emails[0] == "null":
-                    writer.writerow([domains[i], domainIP, 'invalid', emails[0], emails[1], emails[2], emails[3], emails[4], Admin_Name, 'not implemented', 'FAILED, INVALID EMAL'])
+                    writer.writerow([domains[i], domainIP, 'invalid', emails[0], emails[1], emails[2], emails[3], emails[4], Admin_Name, 'not implemented', 'FAILED', 'INVALID EMAL', timeNow])
                     #logs
-                    logging.info('Writing: domains[i], domainIP, invalid, emails[0], emails[1], emails[2], emails[3], emails[4], client name, address, FAILED, INVALID EMAL')
-                    logging.debug(domains[i], domainIP, 'invalid', emails[0], emails[1], emails[2], emails[3], emails[4], Admin_Name, 'address', 'FAILED, INVALID EMAL')
+                    logging.info('Writing: domains[i], domainIP, invalid, emails[0], emails[1], emails[2], emails[3], emails[4], client name, address, FAILED, INVALID EMAL, Date/Time')
+                    logging.debug(domains[i], domainIP, 'invalid', emails[0], emails[1], emails[2], emails[3], emails[4], Admin_Name, 'address', 'FAILED', 'INVALID EMAL', timeNow)
                 else:
-                    writer.writerow([domains[i], domainIP, 'invalid', emails[0], emails[1], emails[2], emails[3], emails[4], Admin_Name, 'not implemented', 'true'])
+                    writer.writerow([domains[i], domainIP, 'invalid', emails[0], emails[1], emails[2], emails[3], emails[4], Admin_Name, 'not implemented', isSent, timeNow])
                     #logs
-                    logging.info('Writing: domains[i], domainIP, invalid, emails[0], emails[1], emails[2], emails[3], emails[4], client name, address, true')
-                    logging.debug(domains[i], domainIP, 'invalid', emails[0], emails[1], emails[2], emails[3], emails[4], Admin_Name, 'address', 'true')
-
-                #send_Email(emails[1]) #call send email function                
+                    logging.info('Writing: domains[i], domainIP, invalid, emails[0], emails[1], emails[2], emails[3], emails[4], client name, address, true???, Date/Time')
+                    logging.debug(domains[i], domainIP, 'invalid', emails[0], emails[1], emails[2], emails[3], emails[4], Admin_Name, 'address', isSent, timeNow)        
                 
                 os.remove(WHOIS_file) #remove WHOIS_file
             else:
                 #write domain name and ip address, ip address and VALID comment
-                writer.writerow([domains[i], domainIP, 'valid', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a','false'])  
+                writer.writerow([domains[i], domainIP, 'valid', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a','false', timeNow])  
                 #logs
-                logging.info('Writing:[domains[i], domainIP, valid, n/a, n/a, n/a, n/a, n/a, n/a, n/a, false')
-                logging.debug(domains[i], domainIP, 'valid', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'false')
+                logging.info('Writing:[domains[i], domainIP, valid, n/a, n/a, n/a, n/a, n/a, n/a, n/a, false, date/time')
+                logging.debug(domains[i], domainIP, 'valid', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'false', timeNow)
 
             i += 1      #increase index by 1
     csvFile2.close()    #close the file
