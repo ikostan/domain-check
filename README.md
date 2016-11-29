@@ -44,7 +44,7 @@ Domain-check is a python based script. The main purpose is to automate the proce
 3. 'ip' represents IP range.
 
 ## Email template (email.csv):
-- Default text is: <the body of the message><closing statement>
+- Please customaze default text before use it.
 
 ## Wait method:
 - Sleep time between WHOIS calls is set to 1 second (time.sleep(1)).
