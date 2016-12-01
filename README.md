@@ -43,12 +43,15 @@ Domain-check is a python based script. The main purpose is to automate the proce
 2. Edit 'startIP' value (default value is: 0.0.0.)
 3. 'ip' represents IP range.
 
+## Email template (email.csv):
+- Please customaze default text before use it.
+
 ## Wait method:
 - Sleep time between WHOIS calls is set to 1 second (time.sleep(1)).
 
 ## How to disable/enable send email function:
-1. Go to 'write_csv' finction
-2. Comment 'send_Email(emails[1])'
+1. During script run-time you will see following question: "Would you like to send an eMail notification to all administrators of invalid domains (1 - yes; 2- no): "
+2. Enter "2" if you not intrested in sending email.
 
 ### NOTE: send email function disabled by default.
 
