@@ -73,6 +73,7 @@ print '\nA new CSV file is created under: ', ipList_file, '\n'
 logging.info('A new CSV file is created under: ')
 logging.debug('A new CSV file is created under: ', ipList_file)
 
+
 logging.info('START')
 # Create a full list of VCN ips:
 def create_vcn_ip_csv(VCN_IP_RANGE):
@@ -93,6 +94,7 @@ def create_vcn_ip_csv(VCN_IP_RANGE):
 VCN_ip_list = create_vcn_ip_csv(VCN_IP_RANGE) #Call create_vcn_ip_csv function
 
 num = len(VCN_ip_list) #A total number of ips in the list
+print "\n=====================================================================================\n"
 print '\nA total number of IPs to validate: ', num, '\n'
 logging.info('A total number of IPs to validate:')
 logging.debug('A total number of IPs to validate: ', num)
@@ -162,15 +164,23 @@ def clean_email(email):
                 old = " "                               #string to replase
                 email = str.replace(email, old, new)    #replace method
     elif "['Error code:" in email:                      #Failed receive WHOIS due to error
-        old = "['"                                      #string to replase - condition 7.1
+        old = "['Error code:"                                      #string to replase - condition 7.1
         email = str.replace(email, old, new)            #replace method
         if "']" in email:                               #string to replase - condition 7.2
             old = "']"                                  #string to replase
             email = str.replace(email, old, new)        #replace method
             if " " in email:                            #to strip all whitespace from string
                 old = " "                               #string to replase
+                email = str.replace(email, old, new)    #replace method      
+    elif "['    Email:" in email:                      #Failed receive WHOIS due to error
+        old = "['    Email:"                                      #string to replase - condition 8.1
+        email = str.replace(email, old, new)            #replace method
+        if "']" in email:                               #string to replase - condition 8.2
+            old = "']"                                  #string to replase
+            email = str.replace(email, old, new)        #replace method
+            if " " in email:                            #to strip all whitespace from string
+                old = " "                               #string to replase
                 email = str.replace(email, old, new)    #replace method
-      
     return email                                        #return the result
     logging.info('Finish clean_email function')
 
@@ -216,6 +226,11 @@ def clean_name(name):
                     
     else:
         name = "NOT FOUND"                                          #Admin Name not found
+    
+    if name == "Whois Privacy Protection Service by VALUE-DOMAIN":
+        name = "PROTECTED"
+    elif name == "Registration Private":
+        name = "PROTECTED"
 
     return name                                                     #return the result
     logging.info('Finish clean_name function')
@@ -227,8 +242,9 @@ def read_csv(domainList_file):
     i = 0
     with codecs.open(domainList_file, 'rU', 'utf-8-sig') as csvFile: #Open file
         reader = csv.reader(csvFile)                                 #Read file
-        print '\nConverting domain names to IP addresses:\n'
-        logging.info('Converting domain names to IP addresses:')
+        print "\n=====================================================================================\n"
+        print '\nConverting domain names to IP addresses...\n'
+        logging.info('Converting domain names to IP addresses...')
         for row in reader:
             if not "Domain_name" in row:                       #Print all except "Domain name" label
                 domainName = row[0]                            #Print each row from CSV file - only from domain name column: row[0]
@@ -236,17 +252,31 @@ def read_csv(domainList_file):
                     domainName = get_domain_name(domainName)   #Get Top Level Domain Name
                 i += 1                                         #indexing
                 domains[i] = domainName
-                domainIP = socket.gethostbyname(domains[i])    #Get website IP
-                print domainName, ' > ', domainIP
-                logging.debug(domainName, ' > ', domainIP)
+                '''
+                try:
+                    domainIP = socket.gethostbyname(domains[i])    #Get website IP
+                except (socket.gaierror):
+                    print "\nOops!  Name or service not known..."
+                    domainIP = "unknown host"
+                    logging.info('Name or service not known...')
+                    logging.debug('INVALID HOSTNAME: unknown host', domainName, ' > ', domainIP)
+
+                if domainIP != "unknown host":
+                    print domainName, ' > ', domainIP
+                    logging.debug(domainName, ' > ', domainIP)
+                else:
+                    print domainName, ' > ', domainIP, "\n"
+                '''                   
     return domains
-    return ip_list
+    #return ip_list
     csvFile.Close()
     logging.info('Finish domainList_file function')
 
 domains = read_csv(domainList_file) #call read_csv function in order to create smart domains list
 n = len(domains)                    #A total number of domain names in the list
+print "\n=====================================================================================\n"
 print '\nA total number of domain names in the test list: ', n, '\n'
+print "\n=====================================================================================\n"
 logging.info('A total number of domain names in the test list: ')
 logging.debug('A total number of domain names in the test list: ', n)
 
@@ -330,7 +360,7 @@ def get_eTemplate(Email_file, name, domain):
     eTemplate = ""
     with codecs.open(Email_file,'rU','utf-8-sig') as csvTEMPLATE:   #Open file
         read_template = csv.reader(csvTEMPLATE)                     #Read file
-        if name == 'NOT FOUND':      
+        if name == 'NOT FOUND' or name == 'PROTECTED':      
             eTemplate = "Hello " + domain + "," + "\n"
         else:
             eTemplate = "Hello " + name + "," + "\n"
@@ -400,20 +430,43 @@ def send_Email(recipient, name, domain):
     logging.info('Finish send_Email function')
 
 
+sendEmail = raw_input("Would you like to send an eMail notification to all administrators of invalid domains (1 - yes; 2- no): ")
+print "\n=====================================================================================\n"
+logging.info('Would you like to send an eMail notification to all administrators of invalid domains (1 - yes; 2- no)')
+logging.debug('Would you like to send an eMail notification to all administrators of invalid domains (1 - yes; 2- no)', sendEmail)
+
+isSent = False
+
 # Write to csv file function:
 def write_csv(ipList_file):
     logging.info('Start write_csv function')
+    invalidName = {}
+    invalidNum = 1
     with codecs.open(ipList_file,'a','utf-8-sig') as csvFile2: #Open file
         writer = csv.writer(csvFile2) #Write to file
         i = 1                         #start index from 1
         for row in domains:           #start loop
-            domainIP = socket.gethostbyname(domains[i]) #Get IP
+            
+            try:
+                domainIP = socket.gethostbyname(domains[i]) #Get IP
+            except (socket.gaierror):
+                print "Oops!  Name or service not known..."
+                domainIP = "unknown host"
+                logging.info('Name or service not known...')
+                logging.debug('INVALID HOSTNAME: unknown host: ', domainIP)
+
+            if domainIP != "unknown host":
+                print domains[i], ' > ', domainIP
+                logging.debug(domains[i], ' > ', domainIP)
+            else:
+                print domains[i], ' > ', domainIP
+
             isValid = 0
             with codecs.open(VCN_IP_RANGE,'r','utf-8-sig') as csvFile3:
                 reader = csv.reader(csvFile3)
                 for row in reader:
                     if row[0] == domainIP: #verify if domain IP is in VCN range
-                        print 'Found valid IP: ' + domains[i] + ': '+ row[0] + " matches " + domainIP
+                        print 'Found valid IP: ' + domains[i] + ': '+ row[0] + " matches " + domainIP, "\n"
                         logging.info('Found valid IP: ')
                         logging.debug('Found valid IP: ' + domains[i] + ': '+ row[0] + " matches " + domainIP)
                         isValid = 1
@@ -436,7 +489,9 @@ def write_csv(ipList_file):
                 else :
                     domain_url = domains[i]          #do nothing
 
-                print '>>> Found invalid IP: ' + domains[i] + ': '+ domainIP + ' <<<'
+                print '>>> Found invalid IP: ' + domains[i] + ': '+ domainIP + ' <<<', "\n"
+                invalidName[invalidNum] = domains[i]
+                invalidNum += 1
                 logging.info('Found invalid IP:')
                 logging.debug('Found invalid IP: ' + domains[i] + ': '+ domainIP)
 
@@ -476,9 +531,9 @@ def write_csv(ipList_file):
                 Admin_Name = get_cName(WHOIS_file)
                 Admin_Name = clean_name(Admin_Name) #call clean_name function in order to clean up all the garbage from the Admin_Name string
 
-                sendEmail = raw_input("Would you like to send an eMail notification to all administrators of invalid domains (1 - yes; 2- no): ") 
-                logging.info('Would you like to send an eMail notification to all administrators of invalid domains (1 - yes; 2- no)')
-                logging.debug('Would you like to send an eMail notification to all administrators of invalid domains (1 - yes; 2- no)', sendEmail)
+                #sendEmail = raw_input("Would you like to send an eMail notification to all administrators of invalid domains (1 - yes; 2- no): ") 
+                #logging.info('Would you like to send an eMail notification to all administrators of invalid domains (1 - yes; 2- no)')
+                #logging.debug('Would you like to send an eMail notification to all administrators of invalid domains (1 - yes; 2- no)', sendEmail)
 
                 if sendEmail == "1":
                     send_Email(emails[1], Admin_Name, domains[i]) #call send_Email function (recipient, name, domain, isSent)  
@@ -491,16 +546,16 @@ def write_csv(ipList_file):
                     logging.debug('Email not sent', isSent)
      
                 now = datetime.datetime.now() #Date/Time stamp
-                timeNow = now.strftime("%Y-%m-%d %H:%M") # Current date and time using strftime (for example: 2014-09-26 16:34)
+                timeNow = now.strftime("%Y-%m-%d %H:%M:%S") # Current date and time using strftime (for example: 2014-09-26 16:34)
                 logging.info('date/time')
                 logging.debug('Date/Time: ', now.strftime("%Y-%m-%d %H:%M"))
 
                 #Invalid IP - write domain name, ip address and INVALID comment
                 if emails[0] == "null":
-                    writer.writerow([domains[i], domainIP, 'invalid', emails[0], emails[1], emails[2], emails[3], emails[4], Admin_Name, 'not implemented', 'FAILED', 'INVALID EMAL', timeNow])
+                    writer.writerow([domains[i], domainIP, 'invalid', emails[0], emails[1], emails[2], emails[3], emails[4], Admin_Name, 'not implemented', 'FAILED: INVALID EMAL', timeNow])
                     #logs
-                    logging.info('Writing: domains[i], domainIP, invalid, emails[0], emails[1], emails[2], emails[3], emails[4], client name, address, FAILED, INVALID EMAL, Date/Time')
-                    logging.debug(domains[i], domainIP, 'invalid', emails[0], emails[1], emails[2], emails[3], emails[4], Admin_Name, 'address', 'FAILED', 'INVALID EMAL', timeNow)
+                    logging.info('Writing: domains[i], domainIP, invalid, emails[0], emails[1], emails[2], emails[3], emails[4], client name, address, FAILED: INVALID EMAL, Date/Time')
+                    logging.debug(domains[i], domainIP, 'invalid', emails[0], emails[1], emails[2], emails[3], emails[4], Admin_Name, 'address', 'FAILED: INVALID EMAL', timeNow)
                 else:
                     writer.writerow([domains[i], domainIP, 'invalid', emails[0], emails[1], emails[2], emails[3], emails[4], Admin_Name, 'not implemented', isSent, timeNow])
                     #logs
@@ -510,18 +565,32 @@ def write_csv(ipList_file):
                 os.remove(WHOIS_file) #remove WHOIS_file
             else:
                 #write domain name and ip address, ip address and VALID comment
-                writer.writerow([domains[i], domainIP, 'valid', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a','false', timeNow])  
+                writer.writerow([domains[i], domainIP, 'valid', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a','False', timeNow])  
                 #logs
                 logging.info('Writing:[domains[i], domainIP, valid, n/a, n/a, n/a, n/a, n/a, n/a, n/a, false, date/time')
-                logging.debug(domains[i], domainIP, 'valid', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'false', timeNow)
+                logging.debug(domains[i], domainIP, 'valid', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'n/a', 'False', timeNow)
 
             i += 1      #increase index by 1
+    return invalidName
     csvFile2.close()    #close the file
     logging.info('Finish write_csv function')
     
-domains = write_csv(ipList_file) #call write_csv function
+invalidName = write_csv(ipList_file) #call write_csv function
+
+invalidDomains = len(invalidName)
+validDomains = n - len(invalidName)
+
+print "\n=====================================================================================\n"
+
+print "Summary:\n"
+print '1) A total number of validated IPs: ', num, '\n'
+print '2) A total number of domain names in the test list: ', n, '\n'
+print '3) A total number of invalid domain names in the test list: ', invalidDomains, '\n'
+print '4) A total number of valid domain names in the test list: ', validDomains, '\n'
+print '5) Send an eMail notification to all administrators of invalid domains: ', isSent, '\n'
 
 os.remove(VCN_IP_RANGE) #remove VCN_IP_RANGE
+print "\n=====================================================================================\n"
 print 'FINISHED'
 logging.info('FINISHED')
 
