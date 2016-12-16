@@ -19,6 +19,7 @@ Domain-check is a python based script. The main purpose is to automate the proce
 1. Python 2.7.9
 2. pip tool for installing Python packages, see [pip 9.0.1](https://pypi.python.org/pypi/pip)
 3. tld for Python, see [tld 0.7.6](https://pypi.python.org/pypi/tld)
+4. numpy
 
 # In order to run it:
 1. Unzip Domain-check.zip file
