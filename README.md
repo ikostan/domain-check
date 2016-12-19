@@ -61,12 +61,20 @@ Domain-check is a python based script. The main purpose is to automate the proce
 3. Go to SMTP_server column and edit default value. Note: SMTP value by default is smtp.gmail.com.
 4. Go to port column and change default value. Note: port value by default is 587.
 
-###B: Sender configurations
+###B: Sender configurations.
 1. Sender confiigurations (used for email login + sendEmail function): Open config.csv file and edit following values/columns: sender (email address), userName, userPassword. 
 2. During script run-time, if you not provided sender configs + isSilent = False, you will see following question: "Would you like to send an eMail notification to all administrators of invalid domains (1 - yes; 2- no): "
 3. Enter "2" if you not intrested in sending email.
 
-### NOTE: send email function disabled by default.
+###C: test_sendEmail function.
+1. There is test_sendEmail function for debuging and fine-tuning porposes.
+2. In order to activate this function open config.csv file.
+3. Go to test_sendEmail column and change value to "yes".
+4. Go to test_emailAddress and provide your test email account.
+
+### NOTE: When test_sendEmail is active all email notifications will be sent to test_emailAddress.
+### NOTE: sendEmail and test_sendEmail will be disabled if you not provided test_emailAddress when test_sendEmail is active.
+### NOTE: sendEmail and test_sendEmail functions are disabled by default.
 
 ## File list:
 >'domains.csv'      - Filename for domain/url list
