@@ -80,9 +80,10 @@ Please customaze default configurations before before running the script:
 - email_
 - reseller_email
 
-###NOTE: Script will perform a few validations regarding values from config.csv fle. In case of configurations conflict sendEmail will be disabled
+PLEASE NOTE:
+- Script will perform a few validations regarding values from config.csv fle. In case of configurations conflict sendEmail will be disabled
 
-  ## Email template (email.csv):
+## Email template (email.csv):
 - Please customaze default text before use it.
 - Script using WHOIS output in order to search for web-owner name.
 - Script will use web-owner if client name is not available.
