@@ -49,12 +49,12 @@ Domain-check is a python based script. The main purpose is to automate the proce
 Please customaze default configurations before before running the script:
   ###A. General configurations:
 
-- isSilent
-- startIP
+- isSilent: returns boolean (True - silent mode is active, False - silent mode is not active)
+- startIP: initial IP range, 0.0.0. by default
 
   ###B. sendEmail related configurations:
 
-- isSend
+- sendEmail: in case you would you like to send an eMail notification to all administrators of invalid domains (1 - yes; 2- no. default)
 - SMTP_server
 - port
 - sender
