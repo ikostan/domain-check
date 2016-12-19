@@ -113,12 +113,13 @@ Please customaze default configurations before before running the script:
 3. Go to test_sendEmail column and change value to "yes".
 4. Go to test_emailAddress and provide your test email account.
 
-  ### NOTE: In case you need to debug the script or during script fine-tuning it is recommended to look for output from: ip_list.csv, logging.log (change log level to DEBUG mode).
-### NOTE: When test_sendEmail is active all email notifications will be sent to test_emailAddress.
-### NOTE: sendEmail and test_sendEmail will be disabled if you not provided test_emailAddress when test_sendEmail is active.
-### NOTE: sendEmail and test_sendEmail functions are disabled by default.
+- NOTE: In case you need to debug the script or during script fine-tuning it is recommended to look for output from: ip_list.csv, logging.log (change log level to DEBUG mode).
+- NOTE: When test_sendEmail is active all email notifications will be sent to test_emailAddress.
+- NOTE: sendEmail and test_sendEmail will be disabled if you not provided test_emailAddress when test_sendEmail is active.
+- NOTE: sendEmail and test_sendEmail functions are disabled by default.
 
   ## File list:
+  
 >'domains.csv'      - Filename for domain/url list
 
 >'template.csv'     - File name for the template file
