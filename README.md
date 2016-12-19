@@ -106,7 +106,8 @@ PLEASE NOTE:
 2. During script run-time, if you not provided sender configs + isSilent = False, you will see following question: "Would you like to send an eMail notification to all administrators of invalid domains (1 - yes; 2- no): "
 3. Enter "2" if you not intrested in sending email.
 
-  ### NOTE: In case isSilen is TRUE + isSend is TRUE + you not provided sender configurations >>> script will continue to run BUT email notifications will not be sent.
+PLEASE NOTE:
+- In case isSilen is TRUE + isSend is TRUE + you not provided sender configurations >>> script will continue to run BUT email notifications will not be sent.
 
   ###C: test_sendEmail function.
 1. There is test_sendEmail function for debuging and fine-tuning porposes.
