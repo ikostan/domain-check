@@ -46,20 +46,29 @@ Domain-check is a python based script. The main purpose is to automate the proce
 3. Edit 'startIP' value (default value is: 0.0.0.). Please note: IP range is 255.
 
 ## Configuration file (config.csv):
-- Please customaze default configurations before before running the script.
+Please customaze default configurations before before running the script:
+
+###A. General configurations:
+
 - isSilent
+- startIP
+###B. sendEmail related configurations:
+
 - isSend
 - SMTP_server
 - port
 - sender
 - userName
 - userPassword
-- startIP
 - test_sendEmail
 - test_emailAddress
+###C. Wait method related configurations:
+
 - sleep_Ping
 - sleep_WHOIS
 - sleep_sendEmail
+###D. Web-admin / website-owner email patterns:
+
 - registrant_email
 - registrar_abuse_contact_email
 - e_mail
