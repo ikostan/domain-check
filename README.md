@@ -55,21 +55,21 @@ Please customaze default configurations before before running the script:
   ###B. sendEmail related configurations:
 
 - sendEmail: in case you would you like to send an eMail notification to all administrators of invalid domains (1 - yes; 2- no. default)
-- SMTP_server
-- port
-- sender
-- userName
-- userPassword
-- test_sendEmail
-- test_emailAddress
+- SMTP_server: SMTP server name
+- port: mail Server port number
+- sender: sender email address
+- userName: sender user-name 
+- userPassword: sender email account password
+- test_sendEmail: sendEmail test mode >>> all email notifications will be transfered to >>> test_emailAddress
+- test_emailAddress: testing email address >>> used in test_sendEmail mode only
 
   ###C. Wait method related configurations:
 
-- sleep_Ping
-- sleep_WHOIS
-- sleep_sendEmail
+- sleep_Ping: sleep (in sec), pause between pings
+- sleep_WHOIS: sleep (in sec), pause between WHOIS requests
+- sleep_sendEmail: sleep (in sec), pause between sending email
 
-  ###D. Web-admin / website-owner email patterns:
+  ###D. Web-admin / website-owner email patterns, set 'no' in order to disable OR 'yes' in order to enable:
 
 - registrant_email
 - registrar_abuse_contact_email
@@ -94,10 +94,10 @@ PLEASE NOTE:
 - Sleep time for sendEmail function (sleep_sendEmail column in 'config.csv' file) is set to 3 second (time.sleep(sleep_sendEmail)).
 - Sleep time between ping calls (sleep_Ping column in 'config.csv' file) is set to 1 second (time.sleep(sleep_Ping)).
 
-  ## How to disable/enable send email function:
+  ## How to disable/enable sendEmail function:
   ###A: General configurations.
 1. Open config.csv file
-2. Go to isSend column and change value: no > do not send email, yes > send email.
+2. Go to sendEmail column and change value: no > do not send email, yes > send email.
 3. Go to SMTP_server column and edit default value. Note: SMTP value by default is smtp.gmail.com.
 4. Go to port column and change default value. Note: port value by default is 587.
 
@@ -107,7 +107,7 @@ PLEASE NOTE:
 3. Enter "2" if you not intrested in sending email.
 
 PLEASE NOTE:
-- In case isSilen is TRUE + isSend is TRUE + you not provided sender configurations >>> script will continue to run BUT email notifications will not be sent.
+- In case isSilen is TRUE + sendEmail is TRUE + you not provided sender configurations >>> script will continue to run BUT email notifications will not be sent.
 
   ###C: test_sendEmail function.
 1. There is test_sendEmail function for debuging and fine-tuning porposes.
