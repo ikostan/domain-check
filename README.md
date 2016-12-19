@@ -43,16 +43,20 @@ Domain-check is a python based script. The main purpose is to automate the proce
 
 1. Open config.csv file
 2. Go to 'startIP' column
-3. Edit 'startIP' value (default value is: 0.0.0.)
-####Please note: IP range is 255.
+3. Edit 'startIP' value (default value is: 0.0.0.). Please note: IP range is 255.
 
 ## Email template (email.csv):
 - Please customaze default text before use it.
 
 ## Wait method:
-- Sleep time between WHOIS calls is set to 1 second (time.sleep(1)).
+- all sleep/wait values in 'config.csv' file
+- Sleep time between WHOIS calls (sleep_WHOIS column in 'config.csv' file) is set to 1 second (time.sleep(sleep_WHOIS)).
+- Sleep time for sendEmail function (sleep_sendEmail column in 'config.csv' file) is set to 3 second (time.sleep(sleep_sendEmail)).
+- Sleep time between ping calls (sleep_Ping column in 'config.csv' file) is set to 1 second (time.sleep(sleep_Ping)).
 
 ## How to disable/enable send email function:
+1. Open config.csv file
+2. Go to isSend column and change value: no > do not send email, yes > send email
 1. During script run-time you will see following question: "Would you like to send an eMail notification to all administrators of invalid domains (1 - yes; 2- no): "
 2. Enter "2" if you not intrested in sending email.
 
