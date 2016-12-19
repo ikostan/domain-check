@@ -1,1 +1,1 @@
-Domain_name, IP_address,Is_valid_IP,Client_email_1,Client_email_2,Client_email_3,Client_email_4,Client_email_5,Client_name,Client_address,isEmail_sent,Date/Time
+Domain_name, IP_address,Is_valid_IP,Client_email_1,Client_email_2,Client_email_3,Client_email_4,Client_email_5,Client_name,Client_address,mail_Sent,Reason,Recipient,Date/Time
