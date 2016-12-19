@@ -1,7 +1,7 @@
 # Domain-check script
 =====================
 [![N|Solid](https://www2.vcn.bc.ca/wp-content/uploads/2014/06/VCN-logo.png)](https://www2.vcn.bc.ca/)
-  # What Domain-check script does:
+## What Domain-check script does:
   - Read domain names from the local file
   - Generate IP range for valid IPs
   - Resolve IP addresses for domain names from the list
