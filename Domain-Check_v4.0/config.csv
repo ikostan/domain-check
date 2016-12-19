@@ -1,2 +1,2 @@
-isSilent,isSend,SMTP_server,port,sender,userName,userPassword,startIP,test_sendEmail,test_emailAddress,sleep_Ping,sleep_WHOIS,sleep_sendEmail,registrant_email,registrar_abuse_contact_email,e_mail,admin_email,tech_email,error_code,email_,reseller_email
+isSilent,sendEmail,SMTP_server,port,sender,userName,userPassword,startIP,test_sendEmail,test_emailAddress,sleep_Ping,sleep_WHOIS,sleep_sendEmail,registrant_email,registrar_abuse_contact_email,e_mail,admin_email,tech_email,error_code,email_,reseller_email
 no,no,smtp.gmail.com,587,,,,0.0.0.,no,,1,1,3,yes,yes,yes,yes,yes,yes,yes,yes
