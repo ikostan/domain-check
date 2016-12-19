@@ -45,6 +45,32 @@ Domain-check is a python based script. The main purpose is to automate the proce
 2. Go to 'startIP' column
 3. Edit 'startIP' value (default value is: 0.0.0.). Please note: IP range is 255.
 
+## Configuration file (config.csv):
+- Please customaze default configurations before before running the script.
+- isSilent
+- isSend
+- SMTP_server
+- port
+- sender
+- userName
+- userPassword
+- startIP
+- test_sendEmail
+- test_emailAddress
+- sleep_Ping
+- sleep_WHOIS
+- sleep_sendEmail
+- registrant_email
+- registrar_abuse_contact_email
+- e_mail
+- admin_email
+- tech_email
+- error_code
+- email_
+- reseller_email
+
+###NOTE: Script will perform a few validations regarding values from config.csv fle. In case of configurations conflict sendEmail will be disabled
+
 ## Email template (email.csv):
 - Please customaze default text before use it.
 - Script using WHOIS output in order to search for web-owner name.
@@ -67,6 +93,7 @@ Domain-check is a python based script. The main purpose is to automate the proce
 1. Sender confiigurations (used for email login + sendEmail function): Open config.csv file and edit following values/columns: sender (email address), userName, userPassword. 
 2. During script run-time, if you not provided sender configs + isSilent = False, you will see following question: "Would you like to send an eMail notification to all administrators of invalid domains (1 - yes; 2- no): "
 3. Enter "2" if you not intrested in sending email.
+
 ### NOTE: In case isSilen is TRUE + isSend is TRUE + you not provided sender configurations >>> script will continue to run BUT email notifications will not be sent.
 
 ###C: test_sendEmail function.
