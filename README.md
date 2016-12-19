@@ -25,25 +25,26 @@ Domain-check is a python based script. The main purpose is to automate the proce
 # In order to run it:
 1. Unzip Domain-check.zip file
 2. Edit 'domains.csv' file (enter domain names that you want to validate, see example inside the file)
-3. Edit 'config.txt' file (enter your SMTP server configurations, see example inside the file)
+3. Edit 'config.csv' file (enter your configurations, see example inside the file)
 4. Open CLI
 5. Go to Domain-check folder from CLI console: cd /Domain-check
 6. Run: python domain-check_v4.0.py
 
 # Aditional configurations:
 ## Logs level:
-1. Default logs level is logging.INFO
-2. In order to change it to DEBUG: change "logging.INFO" to "logging.DEBUG"
+1. Default logs level is logging.DEBUG
+2. In order to change it to INFO: change "logging.DEBUG" to "logging.INFO"
 3. Please note logging.warning, logging.error and logging.critical are still not implemented
-4. Known issue: logging.DEBUG logs show a lot of errors from CLI console, but this issue does not interrupt script function. 
+4. Known issue: n/a. 
 
 ## Valid IP range:
-- NOTE:By default script generates IP range from 207.102.64.1 to 207.102.64.255
+- NOTE:By default script generates IP range from 0.0.0.1 to 0.0.0.254 (only last 8 bits)
 - In oprder to change default range configuration:
 
-1. Go to 'create_vcn_ip_csv' function
-2. Edit 'startIP' value (default value is: 0.0.0.)
-3. 'ip' represents IP range.
+1. Open config.csv file
+2. Go to 'startIP' column
+3. Edit 'startIP' value (default value is: 0.0.0.)
+####Please note: IP range is 255.
 
 ## Email template (email.csv):
 - Please customaze default text before use it.
