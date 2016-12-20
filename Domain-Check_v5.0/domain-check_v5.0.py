@@ -1,5 +1,7 @@
 #!/usr/local/bin/python
 
+# Domain-check project URL: https://github.com/ikostan/domain-check
+
 import sys
 import os
 import os.path
@@ -19,6 +21,8 @@ from email.mime.multipart import MIMEMultipart  # Allows to send a MIME message
 import datetime                                 # Date/Time
 import math                                     # It provides access to the mathematical functions defined by the C standard.
 from validate_email import validate_email       # Validate_email is a package for Python that check if an email is valid
+from urlparse import urlsplit                   # Python 2
+import re                                       # Regular expression operations
 
 
 # System variables:
@@ -128,6 +132,8 @@ error_code = False
 email_ = False
 reseller_email = False
 
+use_admin_name = False
+
 
 def verifyMandatoryFiles(domainList_file, template_file, Config_file, Email_file, templateExist): #Verify all mandatory files
     
@@ -154,10 +160,10 @@ def verifyMandatoryFiles(domainList_file, template_file, Config_file, Email_file
         logging.info('Mandatory file dose not exist: email.csv')
         logging.debug('Mandatory file dose not exist: ' + str(Email_file))
         templateExist = False
-        return templateExist
     else:
         templateExist = True
-        return templateExist
+
+    return templateExist
 
 
 templateExist = verifyMandatoryFiles(domainList_file, template_file, Config_file, Email_file, templateExist)
@@ -280,6 +286,13 @@ def setConfigs(Config_file): #Read configurations file
                     logging.info('Found invalid parameter: Please check "test_emailAddress" value in config.csv file.')
                     logging.info('Found invalid parameter: "test_sendEmail" value changed to: FALSE')
                     logging.debug('Found invalid parameter: Please check "test_emailAddress" value in config.csv file: ' + str(Config_file))
+
+        #for row[21] in myReader: #Get use_admin_name value
+            if (row[21]).upper() == "" or (row[21]) == None or (row[21]).upper() == "NO" or (row[21]).upper() == "FALSE":
+                use_admin_name = False
+            elif (row[21]).upper() == "YES" or (row[9]).upper() == "TRUE":
+                use_admin_name = True
+
 
         #for row[10] in myReader: #Get sleep_Ping value
             if (row[10]) == "" or (row[10]) == None or (row[10]).upper() == "NO" or (row[10]).upper() == "FALSE":
@@ -440,31 +453,31 @@ def setConfigs(Config_file): #Read configurations file
 
             elif templateExist == False:
                 print ('Abort sentEmail execution due to invalid configurations: email.csv file not found')
-                sendEmail == False
+                sendEmail = False
                 logging.info('Abort sentEmail execution due to invalid configurations: email.csv file not found')
                 #sys.exit() #abort script execution due to invalid configurations
 
             elif SMTP_server == "":
                 print ('Abort sentEmail execution due to invalid configurations. Please check "SMTP_server" value in config.csv file.')
-                sendEmail == False
+                sendEmail = False
                 logging.info('Abort sentEmail execution due to invalid configurations. Please check "SMTP_server" value in config.csv file.')
                 logging.debug('Abort sentEmail execution due to invalid configurations. Please check "SMTP_server" value in config.csv file: ' + str(Config_file))
                 #sys.exit() #abort script execution due to invalid configurations
             elif port == "":
                 print ('Abort sentEmail execution due to invalid configurations. Please check "port" value in config.csv file.')
-                sendEmail == False
+                sendEmail = False
                 logging.info('Abort sentEmail execution due to invalid configurations. Please check "port" value in config.csv file.')
                 logging.debug('Abort sentEmail execution due to invalid configurations. Please check "port" value in config.csv file: ' + str(Config_file))
                 #sys.exit() #abort script execution due to invalid configurations
             elif userName == "":
                 print ('Abort sentEmail execution due to invalid configurations. Please check "userName" value in config.csv file.')
-                sendEmail == False
+                sendEmail = False
                 logging.info('Abort sentEmail execution due to invalid configurations. Please check "userName" value in config.csv file.')
                 logging.debug('Abort sentEmail execution due to invalid configurations. Please check "userName" value in config.csv file: ' + str(Config_file))
                 sys.exit() #abort script execution due to invalid configurations
             elif userPassword == "":
                 print ('Abort sentEmail execution due to invalid configurations. Please check "userPassword" value in config.csv file.')
-                sendEmail == False
+                sendEmail = False
                 logging.info('Abort sentEmail execution due to invalid configurations. Please check "userPassword" value in config.csv file.')
                 logging.debug('Abort sentEmail execution due to invalid configurations. Please check "userPassword" value in config.csv file: ' + str(Config_file))
                 #sys.exit() #abort script execution due to invalid configurations
@@ -519,14 +532,9 @@ def setConfigs(Config_file): #Read configurations file
                                 logging.info('eMail notification canceled.')
                                 logging.debug('eMail notification canceled, sendEmail = ' + str(sendEmail))
                                 break
-        else:
-            emplateExist = False
-            print ('Abort sentEmail execution due to invalid configurations: email.csv file not found')
-            sendEmail == False
-            logging.info('Abort sentEmail execution due to invalid configurations: email.csv file not found')
-            #sys.exit() #abort script execution due to invalid configurations
+
     
-    return isSilent, sendEmail, SMTP_server, port, sender, userName, userPassword, startIP, test_sendEmail, test_emailAddress, sleep_Ping, sleep_WHOIS, sleep_sendEmail, registrant_email, registrar_abuse_contact_email, e_mail, admin_email, tech_email, error_code, email_, reseller_email
+    return isSilent, sendEmail, SMTP_server, port, sender, userName, userPassword, startIP, test_sendEmail, test_emailAddress, sleep_Ping, sleep_WHOIS, sleep_sendEmail, registrant_email, registrar_abuse_contact_email, e_mail, admin_email, tech_email, error_code, email_, reseller_email, use_admin_name
     mySettings.close()
 
 
@@ -534,7 +542,8 @@ getConfigs = setConfigs(Config_file) #Call setConfigs function
 
 
 #Set global vars:
-isSilent, sendEmail, SMTP_server, port, sender, userName, userPassword, startIP, test_sendEmail, test_emailAddress, sleep_Ping, sleep_WHOIS, sleep_sendEmail, registrant_email, registrar_abuse_contact_email, e_mail, admin_email, tech_email, error_code, email_, reseller_email = getConfigs
+isSilent, sendEmail, SMTP_server, port, sender, userName, userPassword, startIP, test_sendEmail, test_emailAddress, sleep_Ping, sleep_WHOIS, sleep_sendEmail, registrant_email, registrar_abuse_contact_email, e_mail, admin_email, tech_email, error_code, email_, reseller_email, use_admin_name = getConfigs
+
 print ('\nisSilent: ' + str(isSilent))
 print ('sendEmail: ' + str(sendEmail))
 print ('SMTP server: ' + str(SMTP_server))
@@ -550,6 +559,7 @@ print ('sleep_Ping: ' + str(sleep_Ping))
 print ('sleep_WHOIS: ' + str(sleep_WHOIS))
 print ('sleep_sendEmail: ' + str(sleep_sendEmail))
 print ('templateExist: ' + str(templateExist))
+print ('use_admin_name: ' + str(use_admin_name))
 
 #email patterns:
 print("registrant_email: " + str(registrant_email))
@@ -570,7 +580,7 @@ logging.debug('\nisSilent: ' + str(isSilent) + ' ' + 'sendEmail: ' + str(sendEma
 'test_emailAddress: ' + str(test_emailAddress) + ' ' + 'sleep_Ping: ' + str(sleep_Ping) + ' ' + 'sleep_WHOIS: ' + str(sleep_WHOIS) + ' ' +
 'sleep_sendEmail: ' + str(sleep_sendEmail) + ' ' + 'e_mail: ' + str(e_mail) + ' ' + 'admin_email: ' + str(admin_email) + ' ' +
 'tech_email: ' + str(tech_email) + ' ' + 'error_code: ' + str(error_code) + ' ' + 'email: ' + str(email_) + ' ' + 
-'reseller_email: ' + str(reseller_email) + ' ' + 'templateExist: ' + str(templateExist))
+'reseller_email: ' + str(reseller_email) + ' ' + 'templateExist: ' + str(templateExist) + ' ' + 'use_admin_name: ' + str(use_admin_name))
 
 
 # Create a full list of VCN ips:
@@ -900,15 +910,18 @@ def get_cName(WHOIS_file):
 
 
 #Read and concatinate Email notification:
-def get_eTemplate(Email_file, name, domain):
+def get_eTemplate(Email_file, name, domain, use_admin_name):
     logging.info('Start get_eTemplate function')
     eTemplate = ""
     with codecs.open(Email_file,'rU','utf-8-sig') as csvTEMPLATE:   #Open file
         read_template = csv.reader(csvTEMPLATE)                     #Read file
-        if name == 'not avaiable' or name == 'protected':      
-            eTemplate = "Hello " + domain + "," + "\n"
+        if use_admin_name == True:
+            if name == 'not avaiable' or name == 'protected':      
+                eTemplate = "Hello " + domain.strip() + " administrator," + "\n"
+            else:
+                eTemplate = "Hello " + name + "," + "\n"
         else:
-            eTemplate = "Hello " + name + "," + "\n"
+                eTemplate = "Hello " + domain.strip() + " administrator," + "\n"
         for row in read_template:
             eTemplate = eTemplate + "\n" + ''.join(row)             #convert list object to string
 
@@ -961,7 +974,7 @@ def send_Email(recipient, name, domain, isEmailAccountValid, SMTP_server, port, 
     msg['To'] = recipient
 
     # Create the body of the message (a plain-text and an HTML version).
-    text = get_eTemplate(Email_file, name, domain) #a plain-text
+    text = get_eTemplate(Email_file, name, domain, use_admin_name) #a plain-text
 
     # Record the MIME types of both parts - text/plain and text/html.
     part1 = MIMEText(text, 'plain')
@@ -1218,6 +1231,7 @@ logging.debug('5) Number of an eMail notifications sent to invalid domaina dmini
 
 #os.remove(VCN_IP_RANGE) #remove VCN_IP_RANGE
 print "\n=====================================================================================\n"
+print('Domain-check project URL: https://github.com/ikostan/domain-check')
 print 'FINISHED'
 logging.info('FINISHED')
 
