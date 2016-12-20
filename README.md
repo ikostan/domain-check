@@ -62,6 +62,7 @@ Please customaze default configurations before before running the script:
 - userPassword: sender email account password
 - test_sendEmail: sendEmail test mode >>> all email notifications will be transfered to >>> test_emailAddress
 - test_emailAddress: testing email address >>> used in test_sendEmail mode only
+- use_admin_name: use web-admin name in order to concatinate email template (disabled by default, please do not activate this feature, it's not quaete ready!!!)
 
   ###C. Wait method related configurations:
 
