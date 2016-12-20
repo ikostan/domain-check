@@ -83,6 +83,7 @@ Please customaze default configurations before before running the script:
 
 PLEASE NOTE:
 - Script will perform a few validations regarding values from config.csv fle. In case of configurations conflict sendEmail will be disabled
+- Email notification wil be sent only to the first valid email in case of multiple web-admin emails.
 
 ## Email template (email.csv):
 - Please customaze default text before use it.
