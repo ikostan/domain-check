@@ -21,6 +21,7 @@ Domain-check is a python based script. The main purpose is to automate the proce
 3. tld for Python, see [tld 0.7.6](https://pypi.python.org/pypi/tld)
 4. numpy
 5. validate_email 1.3 (see more info: https://pypi.python.org/pypi/validate_email)
+6. Linux OS
 
   # In order to run it:
 1. Unzip Domain-check.zip file
