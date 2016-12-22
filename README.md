@@ -130,8 +130,8 @@ PLEASE NOTE:
 - 'domains.csv'          - Filename for domain/url list, mandatory file
 - 'template.csv'         - File name for the template file, mandatory file
 - 'config.csv'           - Filename for list with SMTP server configurations, mandatory file
-- 'logging.log'          - Filename for logs (automaticly created after by script), not mandatory file
-- 'ip_list.csv'          - Filename for ip list (automaticly created after by script), not mandatory file
+- 'logging.log'          - Filename for logs (automaticly created by script), not mandatory file
+- 'ip_list.csv'          - Filename for summary file (automaticly created by the script), not mandatory file
 - 'vcn_ip_range.csv'     - List with valid ips (automaticly deleted after script finished to run), not mandatory file
 - 'WHOIS.csv'            - List with WHOIS results (automatically deleted after script finished to run), not mandatory file
 - 'email.txt'            - Contains email notification template, mandatory file in case sendEmail function is active
