@@ -137,6 +137,13 @@ PLEASE NOTE:
 - 'email.txt'            - Contains email notification template, mandatory file in case sendEmail function is active
 
 
+## Last added features:
+### v5.2.1:
+ - A new config.csv contains 7 more configurations (see screen #1 and #3).
+ - In order to test and collect name servers you need to activate <get_name_servers>, just put <yes>. 
+ - Also 6 keys were added in order to specify a valid name servers (<name_server_1> etc..). If you want to disable one of these keys just put <no> as a value.
+ - All new logic is maintained by following functions: def get_NameServers(WHOIS_file), def is_valid_NameServer(nameServer, isValid_nameServer, name_server_list), def clean_name_server(name_server), def create_name_server_list
+
   ## Authors
 
 * **Egor Kostan** - *Initial work* - [iKostan](https://github.com/ikostan)
