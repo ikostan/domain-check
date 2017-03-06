@@ -21,6 +21,7 @@ Domain-check is a python based script. The main purpose is to automate the proce
 3. tld for Python, see [tld 0.7.6](https://pypi.python.org/pypi/tld)
 4. numpy
 5. validate_email 1.3 (see more info: https://pypi.python.org/pypi/validate_email)
+6. Linux OS
 
   # In order to run it:
 1. Unzip Domain-check.zip file
@@ -83,6 +84,7 @@ Please customaze default configurations before before running the script:
 
 PLEASE NOTE:
 - Script will perform a few validations regarding values from config.csv fle. In case of configurations conflict sendEmail will be disabled
+- Email notification wil be sent only to the first valid email in case of multiple web-admin emails.
 
 ## Email template (email.csv):
 - Please customaze default text before use it.
@@ -128,8 +130,8 @@ PLEASE NOTE:
 - 'domains.csv'          - Filename for domain/url list, mandatory file
 - 'template.csv'         - File name for the template file, mandatory file
 - 'config.csv'           - Filename for list with SMTP server configurations, mandatory file
-- 'logging.log'          - Filename for logs (automaticly created after by script), not mandatory file
-- 'ip_list.csv'          - Filename for ip list (automaticly created after by script), not mandatory file
+- 'logging.log'          - Filename for logs (automaticly created by script), not mandatory file
+- 'ip_list.csv'          - Filename for summary file (automaticly created by the script), not mandatory file
 - 'vcn_ip_range.csv'     - List with valid ips (automaticly deleted after script finished to run), not mandatory file
 - 'WHOIS.csv'            - List with WHOIS results (automatically deleted after script finished to run), not mandatory file
 - 'email.txt'            - Contains email notification template, mandatory file in case sendEmail function is active
