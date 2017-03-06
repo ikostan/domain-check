@@ -1,0 +1,2 @@
+isSilent,sendEmail,SMTP_server,port,sender,userName,userPassword,startIP,test_sendEmail,test_emailAddress,sleep_Ping,sleep_WHOIS,sleep_sendEmail,registrant_email,registrar_abuse_contact_email,e_mail,admin_email,tech_email,error_code,email_,reseller_email,use_admin_name,get_name_servers,name_server_1,name_server_2,name_server_3,name_server_4,name_server_5,name_server_6
+no,no,smtp.gmail.com,587,,,,0.0.0.,no,testEmail@mail.com,1,1,3,yes,yes,yes,yes,yes,yes,yes,yes,no,yes,example1.com,example2.com,no,example4.com,example5.com,example6.com
